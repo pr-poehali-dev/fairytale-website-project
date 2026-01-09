@@ -1,10 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
+const RosePetal = ({ delay }: { delay: number }) => {
+  return (
+    <div
+      className="absolute animate-fall opacity-70"
+      style={{
+        left: `${Math.random() * 100}%`,
+        animationDelay: `${delay}s`,
+        animationDuration: `${8 + Math.random() * 4}s`,
+      }}
+    >
+      <span className="text-2xl">🌹</span>
+    </div>
+  );
+};
+
 const Index = () => {
   const [activeSection, setActiveSection] = useState('hero');
+  const [petals, setPetals] = useState<number[]>([]);
+
+  useEffect(() => {
+    setPetals(Array.from({ length: 20 }, (_, i) => i));
+  }, []);
 
   const scrollToSection = (section: string) => {
     setActiveSection(section);
@@ -48,8 +68,13 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-red-50 via-pink-50 to-white">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-red-100">
+    <div className="min-h-screen bg-gradient-to-b from-red-50 via-pink-50 to-white relative overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {petals.map((i) => (
+          <RosePetal key={i} delay={i * 0.5} />
+        ))}
+      </div>
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-red-100 relative">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-primary">🌹 Наша история</h1>
