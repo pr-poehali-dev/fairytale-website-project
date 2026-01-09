@@ -21,10 +21,23 @@ const RosePetal = ({ delay }: { delay: number }) => {
 const Index = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const [petals, setPetals] = useState<number[]>([]);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   useEffect(() => {
     setPetals(Array.from({ length: 20 }, (_, i) => i));
   }, []);
+
+  const toggleMusic = () => {
+    const audio = document.getElementById('bg-music') as HTMLAudioElement;
+    if (audio) {
+      if (isMusicPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+      setIsMusicPlaying(!isMusicPlaying);
+    }
+  };
 
   const scrollToSection = (section: string) => {
     setActiveSection(section);
@@ -69,6 +82,18 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-red-50 via-pink-50 to-white relative overflow-hidden">
+      <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_4a8a392e85.mp3" type="audio/mpeg" />
+      </audio>
+      
+      <button
+        onClick={toggleMusic}
+        className="fixed bottom-8 right-8 z-50 bg-primary hover:bg-red-600 text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110"
+        aria-label="Toggle music"
+      >
+        <Icon name={isMusicPlaying ? 'Volume2' : 'VolumeX'} size={24} />
+      </button>
+
       <div className="fixed inset-0 pointer-events-none z-0">
         {petals.map((i) => (
           <RosePetal key={i} delay={i * 0.5} />
